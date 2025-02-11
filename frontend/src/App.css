@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "tailwindcss";
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+    height: 100vh;
+    width: 100vw;
+    font-family: "Inter", sans-serif;
+      /* background-color: #000; */
+  }
+  
+  canvas {
+    display: block;
+  }
+  
+  button{
+    color: black;
+    background-color: #fff3f3;
+    padding: 4px 23px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  .home-container{
+    height: 100vh;
+    background-color: #000;
+  }
+
+  .hero{
+    height: 50vh;
+    /* background-color: #cab1b1; */
+  }
+
+  .button-container{
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    height: 100px;
+  }
+
+  /* LOGIN PAGE */
+  .login-container{
+    height: 100vh;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+  form{
+    border: 1px solid rgb(255, 255, 255);
+    padding: 20px 10px;
+    border-radius: 10px;
+  }
+  .form-group{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+  }
+  .form-group label{
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  /* DASHBOARD CSS */
+  .dashboard-container{
+    padding: 10px;
+  }
+  .dashboard-header{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 60px 10px 30px;    
+  }
+  .dash-button-container{
+    display: flex;
+    /* background-color: aquamarine; */
+    justify-content: flex-end;
+    gap: 2vh;
+    padding-right: 10vh;
+    padding-top: 7vh;
+  }
+  .create-btn{
+    background-color: #8C86FF;
+    color: white;
+    padding: 10px 23px;
+    font-weight: 400;
+  }
+  .join-btn{
+    background-color: #8c86ff56;
+    border:2px solid #8C86FF;
+    color: black;
+    padding: 10px 23px;
+    font-weight: 500;
+  }
+  .space-container{
+    padding: 10px 60px 10px 30px;    
+  }
+  .space-container h2{
+    font-size: 3vh;
+    font-weight: 600;
+  }
