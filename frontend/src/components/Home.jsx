@@ -12,7 +12,7 @@ const Home = () => {
         <HeroHighlight/>
         <div className='button-container'>
             <button onClick={()=>navigate("/login")}>Login</button>
-            {/* <Link to="/signup">Signup</Link> */}
+            <button onClick={()=>navigate("/register")}>Register</button>
         </div>
 
     </div>

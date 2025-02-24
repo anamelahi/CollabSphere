@@ -5,6 +5,8 @@ import Home from './components/Home'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
+import Register from './components/Register'
+import PhaserGame from './components/PhaserDesign/PhaserGame'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -14,8 +16,9 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home/>}/>
-          <Route path="/office" element={<OfficeFloor/>}/>
+          <Route path="/office" element={<PhaserGame/>}/>
           <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<Register/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
         </Routes>
       </Router>

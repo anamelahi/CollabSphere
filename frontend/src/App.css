@@ -63,8 +63,14 @@ html, body {
   }
   form{
     border: 1px solid rgb(255, 255, 255);
-    padding: 20px 10px;
+    height: 50vh;
+    padding: 20px 35px;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
   }
   .form-group{
     display: flex;
@@ -78,6 +84,39 @@ html, body {
     font-weight: 500;
     letter-spacing: 0.5px;
   }
+  .login-container button{
+    padding: 7px 25px;
+    background-color: #5c4cc4;
+    color: white;
+  }
+
+  /* REGISTER CSS */
+  .register-container{
+    height: 100vh;
+    background-color: #f8faff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+  .register-container form{
+    height: 65vh;
+    padding: 30px 30px;
+    border-radius: 10px; 
+    background-color: #f1f1f1;
+    display: flex;
+    color: #000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+   }
+   .register-container button{
+    background-color: #5c4cc4;
+    color: white;
+    padding: 10px 25px;
+   }
 
   /* DASHBOARD CSS */
   .dashboard-container{
@@ -115,4 +154,53 @@ html, body {
   .space-container h2{
     font-size: 3vh;
     font-weight: 600;
+  }
+
+  /* MODAL CSS */
+  .modal{
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    width: 30vw;
+    height: 50vh;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  
+  }
+  .modal-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .close-btn{
+    background-color: #d10b1f;
+    color: white;
+    padding: 5px 10px;
+    font-weight: 500;
+    font-size: 10px;
+  }
+  .modal   form{
+    height: fit-content;
+    padding: 5px 5px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .modal form input,select{
+    border: 1px solid #8C86FF;
+    padding: 10px 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+  .modal-btn{
+    background-color: #8C86FF;
+    color: white;
+    padding: 10px 23px;
+    font-weight: 400;
+    width: 100%;
+    margin-top: 30px;
   }
