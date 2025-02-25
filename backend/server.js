@@ -81,6 +81,16 @@ app.post("/login",async(req,res)=>{
     }
 })
 
+app.post("/logout", (req,res)=>{
+    req.session.destroy((error)=>{
+        if(error){
+            res.status(500).json({message:"Logout Failed."})
+        }
+        res.clearCookie("connect.sid");
+        res.json({message:"logged out successful"})
+    });
+});
+
 app.post("/api/space", async(req,res)=>{
     const spaceName = req.body.spaceName;
     const theme = req.body.theme;

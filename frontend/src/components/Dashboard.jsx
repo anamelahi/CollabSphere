@@ -2,11 +2,30 @@ import React, { useState, useEffect } from "react";
 import "../App.css";
 import axios from "axios";
 import CreateSpaceModal from "./CreateSpaceModal";
+import { Link, useNavigate } from 'react-router-dom'
+
 
 const Dashboard = () => {
   const [spaces, setSpaces] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [userClicked, setUserClicked] = useState(false);
+  const nav = useNavigate();
+  
+  // useEffect((user)=>{
+  //   if(!user){
+  //     nav("/login")
+  //   }
+  // },[user,nav])
+
+  const handleUserClick =()=>{
+    setUserClicked(!userClicked);
+  }
+  const handleLogout =()=>{
+    axios.post("http://localhost:3000/logout",{},{withCredentials:true})
+    .then(()=> window.location.href="/login")
+    .catch((err)=>console.log(err))
+  }
 
   useEffect(() => {
     axios
@@ -23,7 +42,8 @@ const Dashboard = () => {
       <div className="dashboard-header">
         <img src="/logo.png" alt="Logo" />
         <div className="user-div">
-          <p>{user ? `${user.first_name}` : "LOADING...."}</p>
+          <p onClick={handleUserClick}>{user ? `${user.first_name}` :"LOADING"}</p>
+          {userClicked ? <button onClick={handleLogout} className="logout">Logout</button>:null}
         </div>
       </div>
       <div className="dashboard-body">
