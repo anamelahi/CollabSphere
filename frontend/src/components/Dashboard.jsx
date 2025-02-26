@@ -11,12 +11,6 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [userClicked, setUserClicked] = useState(false);
   const nav = useNavigate();
-  
-  // useEffect((user)=>{
-  //   if(!user){
-  //     nav("/login")
-  //   }
-  // },[user,nav])
 
   const handleUserClick =()=>{
     setUserClicked(!userClicked);
@@ -55,6 +49,7 @@ const Dashboard = () => {
           <CreateSpaceModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
+            email = {user?.email}
           />
         </div>
         <div className="space-container">

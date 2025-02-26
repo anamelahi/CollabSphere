@@ -91,12 +91,42 @@ app.post("/logout", (req,res)=>{
     });
 });
 
-app.post("/api/space", async(req,res)=>{
-    const spaceName = req.body.spaceName;
-    const theme = req.body.theme;
-    const userId = await db.query("SELECT id FROM user_credentials WHERE email = $1",[email]);
-    // const newSpace = await db.query("INSERT INTO spaces (name")
-})
+app.post("/api/spaces", async (req, res) => {
+    const { email, spaceName, config } = req.body; // Extract email here
+
+    if (!email || !spaceName) {
+        return res.status(400).json({ error: "Email and space name are required" });
+    }
+
+    try {
+        // Fetch owner_id using the email
+        const ownerResult = await db.query("SELECT id FROM user_credentials WHERE email = $1", [email]);
+
+        if (ownerResult.rows.length === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const owner_id = ownerResult.rows[0].id;
+
+        // Insert space into the database
+        const spaceResult = await db.query(
+            "INSERT INTO spaces (name, owner_id, config) VALUES ($1, $2, $3) RETURNING *",
+            [spaceName, owner_id, config || {}]
+        );
+
+        const space = spaceResult.rows[0];
+
+        // Add entry in `user_spaces` table
+        await db.query("INSERT INTO user_spaces (user_id, space_id) VALUES ($1, $2)", [owner_id, space.id]);
+
+        res.status(201).json(space);
+    } catch (error) {
+        console.error("Error creating space:", error);
+        res.status(500).json({ error: "Failed to create space" });
+    }
+});
+
+
 
 app.get('/dashboard', authMiddleware ,async(req,res)=>{
     try {
@@ -105,6 +135,8 @@ app.get('/dashboard', authMiddleware ,async(req,res)=>{
             return res.status(400).json({message:"User not found"});
         }
         res.json({user:user.rows[0]});
+        // console.log(user.rows[0]);
+        
     } catch (error) {
         return res.status(500).json({message:"Error fetching user"})
     }
