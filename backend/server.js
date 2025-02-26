@@ -99,7 +99,6 @@ app.post("/api/spaces", async (req, res) => {
     }
 
     try {
-        // Fetch owner_id using the email
         const ownerResult = await db.query("SELECT id FROM user_credentials WHERE email = $1", [email]);
 
         if (ownerResult.rows.length === 0) {

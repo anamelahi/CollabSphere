@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import "../App.css";
-// import Modal from "react-modal";
 
-Modal.setAppElement("#root"); // Add this line at the top
+Modal.setAppElement("#root");
 
 const CreateSpaceModal = ({ isOpen, onClose, onSpaceCreated,email }) => {
   const [spaceName, setSpaceName] = useState("");
