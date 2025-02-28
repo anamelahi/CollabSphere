@@ -3,6 +3,7 @@ import "../App.css";
 import axios from "axios";
 import CreateSpaceModal from "./CreateSpaceModal";
 import { Link, useNavigate } from 'react-router-dom'
+import SpaceCard from "./ui/SpaceCard";
 
 
 const Dashboard = () => {
@@ -28,9 +29,19 @@ const Dashboard = () => {
       .catch((err) => console.log("Error fetching user in the dashboard", err));
   }, []);
 
+  useEffect(()=>{
+    axios.get("http://localhost:3000/dashboard",{withCredentials:true})
+    .then((res)=> setSpaces(res.data.spaces))
+    .catch((err)=>console.log("Error fetching spaces",err));
+  },[])
+
   const handleCreateSpace = () => {
     setIsModalOpen(true);
   };
+  const handleCreatedSpace = (newSpace) =>{
+    setSpaces([...spaces, newSpace]);
+    console.log("These are the new spaces", newSpace);
+  }
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
@@ -50,10 +61,17 @@ const Dashboard = () => {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             email = {user?.email}
+            onSpaceCreated={handleCreatedSpace}
           />
         </div>
         <div className="space-container">
           <h2>My Spaces</h2>
+          <SpaceCard/>
+          {/* <ul>
+        {spaces.map((space, index) => (
+          <li key={index}>{space.name} - {space.owner_id}</li>
+        ))}
+      </ul> */}
         </div>
       </div>
     </div>

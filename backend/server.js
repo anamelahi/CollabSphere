@@ -118,6 +118,7 @@ app.post("/api/spaces", async (req, res) => {
         // Add entry in `user_spaces` table
         await db.query("INSERT INTO user_spaces (user_id, space_id) VALUES ($1, $2)", [owner_id, space.id]);
 
+        // res.json({space:spaceResult.rows[0]});
         res.status(201).json(space);
     } catch (error) {
         console.error("Error creating space:", error);
@@ -130,10 +131,15 @@ app.post("/api/spaces", async (req, res) => {
 app.get('/dashboard', authMiddleware ,async(req,res)=>{
     try {
         const user = await db.query("SELECT id, first_name, last_name, email FROM user_credentials WHERE id = $1",[req.session.userId]);
+        const spaces = await db.query("SELECT name,owner_id FROM spaces WHERE owner_id = $1",[req.session.userId]);
         if(user.rows.length === 0){
             return res.status(400).json({message:"User not found"});
         }
-        res.json({user:user.rows[0]});
+        if (spaces.rows.length === 0) {
+            return res.json({message:"NO SPACES CREATED YET"})
+        }
+        
+        res.json({user:user.rows[0], spaces:spaces.rows});
         // console.log(user.rows[0]);
         
     } catch (error) {

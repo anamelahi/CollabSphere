@@ -34,6 +34,8 @@ const CreateSpaceModal = ({ isOpen, onClose, onSpaceCreated,email }) => {
         console.log("Space created", response.data);
         setSpaceName("");
         setTheme("Light")
+        onClose();
+        onSpaceCreated(response.data);
       }
     } catch (error) {
       console.log("Error creating space", error.response?.data || error.message);
