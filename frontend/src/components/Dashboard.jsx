@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../App.css";
 import axios from "axios";
 import CreateSpaceModal from "./CreateSpaceModal";
+import JoinSpaceModal from "./JoinSpaceModal";
 import { Link, useNavigate } from 'react-router-dom'
 import SpaceCard from "./ui/SpaceCard";
 
@@ -9,6 +10,8 @@ import SpaceCard from "./ui/SpaceCard";
 const Dashboard = () => {
   const [spaces, setSpaces] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+
   const [user, setUser] = useState(null);
   const [userClicked, setUserClicked] = useState(false);
   const nav = useNavigate();
@@ -22,38 +25,46 @@ const Dashboard = () => {
     .catch((err)=>console.log(err))
   }
 
+  //Fetches user info and SSpaces
   useEffect(() => {
     axios
       .get("http://localhost:3000/dashboard", { withCredentials: true })
-      .then((res) => setUser(res.data.user))
-      .catch((err) => console.log("Error fetching user in the dashboard", err));
+      .then((res) => {
+        console.log("API Response:", res.data); // Debugging Log
+        setUser(res.data.user);  // Update user state
+        setSpaces(res.data.spaces);  // Update spaces state
+        console.log(spaces);
+        
+      })
+      .catch((err) => console.log("Error fetching user and spaces:", err));
   }, []);
-
-  useEffect(()=>{
-    axios.get("http://localhost:3000/dashboard",{withCredentials:true})
-    .then((res)=> setSpaces(res.data.spaces))
-    .catch((err)=>console.log("Error fetching spaces",err));
-  },[])
+  
 
   const handleCreateSpace = () => {
     setIsModalOpen(true);
   };
+  const handleJoinSpace = ()=>{
+    setIsJoinModalOpen(true);
+  }
   const handleCreatedSpace = (newSpace) =>{
     setSpaces([...spaces, newSpace]);
     console.log("These are the new spaces", newSpace);
+  }
+  const handleSpaceJoined = (newSpace)=>{
+    setSpaces((prevSpaces) => [...prevSpaces, newSpace]); // Update state with new space
   }
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
         <img src="/logo.png" alt="Logo" />
         <div className="user-div">
-          <p onClick={handleUserClick}>{user ? `${user.first_name}` :"LOADING"}</p>
+          <p onClick={handleUserClick}>{user ? user.name:"LOADING"}</p>
           {userClicked ? <button onClick={handleLogout} className="logout">Logout</button>:null}
         </div>
       </div>
       <div className="dashboard-body">
         <div className="dash-button-container">
-          <button className="join-btn">Join a Space</button>
+          <button className="join-btn" onClick={handleJoinSpace}>Join a Space</button>
           <button className="create-btn" onClick={handleCreateSpace}>
             Create Space
           </button>
@@ -63,15 +74,15 @@ const Dashboard = () => {
             email = {user?.email}
             onSpaceCreated={handleCreatedSpace}
           />
+          <JoinSpaceModal isOpen={isJoinModalOpen} onClose={()=>setIsJoinModalOpen(false)} onSpaceJoined={handleSpaceJoined} userId={user?.userId}/>
         </div>
         <div className="space-container">
           <h2>My Spaces</h2>
-          <SpaceCard/>
-          {/* <ul>
+          <ul>
         {spaces.map((space, index) => (
-          <li key={index}>{space.name} - {space.owner_id}</li>
+          <SpaceCard key={index} spaceId={space.spaceId} cardTitle={space.space_name} ownerName={user.name}/>
         ))}
-      </ul> */}
+      </ul>
         </div>
       </div>
     </div>

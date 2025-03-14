@@ -1,20 +1,24 @@
 .space-card{
-    background-color: aquamarine;
-    height: 35vh;
+    /* background-color: aquamarine; */
+    height: 45vh;
     width: 17vw;
     border-radius: 15px;
+}
+.space-card:hover{
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.712) 0px 3px 8px;
 }
 .preview{
     background-color: #c98282;
     height: 80%;
     width: 100%;
     border-radius: 15px 15px 0px 0px;
-
+    padding: 10px;
 }
 .desc{
-    height: 20%;
+    height: fit-content;
     width: 100%;
     background-color: yellowgreen;
     border-radius:0px 0px 15px 15px;
-
+    padding: 10px;
 }

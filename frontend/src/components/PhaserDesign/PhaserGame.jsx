@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
+import { useParams } from 'react-router-dom';
 import OfficeScene from './OfficeScene'; // Phaser scene
 
 const PhaserGame = () => {
     const gameRef = useRef(null);
-
+    const {spaceId} = useParams();//to get the space id
     useEffect(() => {
         if (!gameRef.current) {
             gameRef.current = new Phaser.Game({
@@ -29,8 +30,10 @@ const PhaserGame = () => {
                 gameRef.current.destroy(true);
                 gameRef.current = null;
             }
+            console.log(spaceId);
+            
         };
-    }, []);
+    }, [spaceId]);
 
     return <div id="phaser-container"></div>;
 };

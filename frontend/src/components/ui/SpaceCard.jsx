@@ -1,16 +1,23 @@
 import React from 'react'
 import "./Ui.css"
+import { useNavigate } from 'react-router-dom';
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 
-const SpaceCard = () => {
+const SpaceCard = (props) => {
+  const nav = useNavigate();
+  const handleClick = () =>{
+    nav(`/office/${props.spaceId}`)
+  }
   return (
     <div className='space-card'>
-        <div className="preview">
-
+        <div onClick={handleClick} className="preview">
+          <p>{props.spaceId}</p>
         </div>
         <div className="desc">
-            <HiOutlineDotsHorizontal/>
+          <p>{props.cardTitle}</p>
+          <p>Owned by: {props.ownerName}</p>
+            {/* <HiOutlineDotsHorizontal/> */}
         </div>
     </div>
   )

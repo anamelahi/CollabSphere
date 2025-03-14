@@ -16,6 +16,7 @@ html, body {
     height: 100vh;
     width: 100vw;
     font-family: "Inter", sans-serif;
+    overflow-y: auto;
       /* background-color: #000; */
   }
   
@@ -149,7 +150,16 @@ html, body {
     font-weight: 500;
   }
   .space-container{
-    padding: 10px 60px 10px 30px;    
+    padding: 10px 60px 10px 30px;  
+    position: absolute;  
+    
+  }
+  .space-container ul{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 7vh;
+    flex-wrap: wrap;
   }
   .space-container h2{
     font-size: 3vh;
@@ -162,11 +172,13 @@ html, body {
     color: rgb(0, 0, 0);
     width: 30vw;
     height: 50vh;
-    margin: 0 auto;
+    /* margin: 100 auto; */
     padding: 20px;
     border-radius: 10px;
     position: relative;
+    margin: auto;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  
+    z-index: 100;
   }
   .modal-header{
     display: flex;
