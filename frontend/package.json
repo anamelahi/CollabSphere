@@ -13,7 +13,7 @@
     "@react-three/drei": "^9.121.4",
     "@react-three/fiber": "^8.17.14",
     "@tailwindcss/vite": "^4.0.6",
-    "axios": "^1.7.9",
+    "axios": "^1.8.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.4.2",
     "mini-svg-data-uri": "^1.4.4",
