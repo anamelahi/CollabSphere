@@ -13,7 +13,6 @@ import { Server } from "socket.io";
 import { error, log } from "console";
 import { validate as isUUID } from "uuid";
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
@@ -62,29 +61,54 @@ const io = new Server(server, {
 });
 
 let players = {}; // Store player positions
+const spaceUsers = {}; 
+const userSocketMap = {}; 
 
 io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
+    socket.on("join-space", ({ spaceId, userId }) => {
+        if (!userId) {
+            console.error("Received undefined userId for socket:", socket.id);
+            return;
+        }
 
-    socket.on("new-player", (playerData) => {
-        players[socket.id] = playerData;
-        io.emit("update-players", players);
+        socket.join(spaceId);
+        userSocketMap[socket.id] = { spaceId, userId };
+
+        if (!spaceUsers[spaceId]) spaceUsers[spaceId] = new Set();
+        spaceUsers[spaceId].add(userId);
+
+        console.log(`User ${userId} joined space: ${spaceId}`);
+        console.log(`Users in space ${spaceId}: `, Array.from(spaceUsers[spaceId]));
+
+        // Send updated user list to everyone in the room
+        io.to(spaceId).emit("update-users", { users: Array.from(spaceUsers[spaceId]) });
     });
 
-    socket.on("player-move", (movementData) => {
-        if (players[socket.id]) {
-            players[socket.id].x = movementData.x;
-            players[socket.id].y = movementData.y;
-            io.emit("update-players", players);
+    socket.on("move-player", ({ x, y }) => {
+        if (userSocketMap[socket.id]) {
+            const { userId } = userSocketMap[socket.id];
+            socket.broadcast.emit("player-move", { userId, x, y });
         }
     });
 
     socket.on("disconnect", () => {
-        console.log(`User disconnected: ${socket.id}`);
-        delete players[socket.id];
-        io.emit("update-players", players);
+        if (userSocketMap[socket.id]) {
+            const { spaceId, userId } = userSocketMap[socket.id];
+
+            if (spaceUsers[spaceId]) {
+                spaceUsers[spaceId].delete(userId); // Remove the user from the Set
+
+                // Send updated user list
+                io.to(spaceId).emit("update-users", { users: Array.from(spaceUsers[spaceId]) });
+            }
+
+            delete userSocketMap[socket.id];
+
+            console.log(`User ${userId} disconnected from space ${spaceId}`);
+        }
     });
 });
+
 
 // **User Registration**
 app.post("/register", async (req, res) => {
@@ -237,28 +261,42 @@ app.post("/api/join-space", async (req, res) => {
 app.get("/dashboard", authMiddleware, async (req, res) => {
     try {
         const result = await db.query(
-            "SELECT u.id AS user_id, u.first_name, u.last_name, u.email, s.name AS space_name, s.id AS space_id " +
-            "FROM user_credentials u " +
-            "LEFT JOIN spaces s ON u.id = s.owner_id " +
-            "WHERE u.id = $1",
+            `SELECT 
+                u.id AS user_id, 
+                u.first_name, 
+                u.last_name, 
+                u.email, 
+                s.id AS space_id, 
+                s.name AS space_name, 
+                owner.id AS owner_id, 
+                owner.first_name AS owner_first_name, 
+                owner.last_name AS owner_last_name
+            FROM user_credentials u
+            LEFT JOIN user_spaces us ON u.id = us.user_id
+            LEFT JOIN spaces s ON us.space_id = s.id
+            LEFT JOIN user_credentials owner ON s.owner_id = owner.id
+            WHERE u.id = $1`,
             [req.session.userId]
         );
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "User not found or no spaces created yet" });
+            return res.status(404).json({ message: "User not found or no spaces created/joined yet" });
         }
 
+        // Logged-in user details
         const user = {
-            id: result.rows[0].user_id,
+            userId: result.rows[0].user_id,
             name: `${result.rows[0].first_name} ${result.rows[0].last_name}`,
             email: result.rows[0].email
         };
 
+        // Spaces joined or created by the user
         const spaces = result.rows
             .filter(row => row.space_id !== null)
             .map(row => ({
                 spaceId: row.space_id,
-                space_name: row.space_name
+                spaceName: row.space_name,
+                ownerName: `${row.owner_first_name} ${row.owner_last_name}` // Display the creator's name
             }));
 
         res.json({ user, spaces });
@@ -267,6 +305,7 @@ app.get("/dashboard", authMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
+
 
 // Start the server
 server.listen(port, () => {

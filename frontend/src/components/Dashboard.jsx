@@ -30,15 +30,21 @@ const Dashboard = () => {
     axios
       .get("http://localhost:3000/dashboard", { withCredentials: true })
       .then((res) => {
-        console.log("API Response:", res.data); // Debugging Log
+        console.log("API Response:", res.data); // Debugging 
         setUser(res.data.user);  // Update user state
         setSpaces(res.data.spaces);  // Update spaces state
-        console.log(spaces);
-        
+        // console.log(user.userId);  
       })
       .catch((err) => console.log("Error fetching user and spaces:", err));
   }, []);
   
+  //debugging useEffect
+  // useEffect(() => {
+  //   if (user) {
+  //     console.log("Updated User:", user);
+  //     console.log("UserId:", user.userId);
+  //   }
+  // }, [user]);
 
   const handleCreateSpace = () => {
     setIsModalOpen(true);
@@ -80,7 +86,7 @@ const Dashboard = () => {
           <h2>My Spaces</h2>
           <ul>
         {spaces.map((space, index) => (
-          <SpaceCard key={index} spaceId={space.spaceId} cardTitle={space.space_name} ownerName={user.name}/>
+          <SpaceCard key={index} spaceId={space.spaceId} cardTitle={"abc"} ownerName={space.ownerName} userId={user.userId}/>
         ))}
       </ul>
         </div>
