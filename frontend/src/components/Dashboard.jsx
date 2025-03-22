@@ -20,7 +20,7 @@ const Dashboard = () => {
     setUserClicked(!userClicked);
   }
   const handleLogout =()=>{
-    axios.post("http://localhost:3000/logout",{},{withCredentials:true})
+    axios.post("http://localhost:3000/api/logout",{},{withCredentials:true})
     .then(()=> window.location.href="/login")
     .catch((err)=>console.log(err))
   }
@@ -28,7 +28,7 @@ const Dashboard = () => {
   //Fetches user info and SSpaces
   useEffect(() => {
     axios
-      .get("http://localhost:3000/dashboard", { withCredentials: true })
+      .get("http://localhost:3000/api/dashboard", { withCredentials: true })
       .then((res) => {
         console.log("API Response:", res.data); // Debugging 
         setUser(res.data.user);  // Update user state

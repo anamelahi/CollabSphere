@@ -14,7 +14,7 @@ const Login = () => {
   const handleSubmit = async(e)=>{
     e.preventDefault();
     try {
-      let res = await axios.post('http://localhost:3000/login',loginForm,{
+      let res = await axios.post('http://localhost:3000/api/login',loginForm,{
         withCredentials:true, //for saving the session (cookie)
       });
       if(res.data.error){

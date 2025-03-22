@@ -1,10 +1,9 @@
 import express from "express";
-import { createSpace, getUserDashboard } from "../controllers/spaceController.js";
-import authMiddleware from "../middlewares/authMiddleware.js";
+import { createSpace, joinSpace } from "../controllers/spaceController.js";
 
 const router = express.Router();
 
 router.post("/spaces", createSpace);
-router.get("/dashboard", authMiddleware, getUserDashboard);
+router.post("/join-space", joinSpace);
 
 export default router;

@@ -11,8 +11,6 @@ const db = new pg.Client({
     port: 5432,
 });
 
-db.connect()
-    .then(() => console.log("Connected to PostgreSQL"))
-    .catch((err) => console.error("Database connection error:", err));
+db.connect().catch((err) => console.error("Database connection error:", err));
 
 export default db;

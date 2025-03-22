@@ -1,11 +1,11 @@
 import express from "express";
-import { registerUser, loginUser, logoutUser } from "../controllers/authController.js";
-import passport from "passport";
+import { register, login, logout, getSession } from "../controllers/authController.js";
 
 const router = express.Router();
 
-router.post("/register", registerUser);
-router.post("/login", passport.authenticate("local"), loginUser);
-router.post("/logout", logoutUser);
+router.post("/register", register);
+router.post("/login", login);
+router.post("/logout", logout);
+router.get("/session", getSession);
 
 export default router;

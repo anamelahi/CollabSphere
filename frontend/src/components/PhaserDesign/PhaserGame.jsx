@@ -39,18 +39,18 @@
 // };
 
 // export default PhaserGame;
-
 import React, { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
-import OfficeScene from './OfficeScene'; // Import your Phaser scene
+import OfficeScene from './OfficeScene';
 
-const socket = io("http://localhost:3000"); // Connect to backend
+const socket = io("http://localhost:3000", { withCredentials: true });
 
 const PhaserGame = () => {
     const gameRef = useRef(null);
-    const { spaceId } = useParams(); // Get space ID
+    const { spaceId } = useParams();
+    const userId = localStorage.getItem("userId") || "1";
 
     useEffect(() => {
         if (!gameRef.current) {
@@ -67,10 +67,8 @@ const PhaserGame = () => {
                         debug: false
                     }
                 },
-                scene: [new OfficeScene(socket)] // Pass socket to the scene
+                scene: [new OfficeScene(socket, spaceId, userId)]
             });
-
-            socket.emit("join-space", { spaceId, userId: socket.id }); // Tell server we joined
         }
 
         return () => {
@@ -78,12 +76,12 @@ const PhaserGame = () => {
                 gameRef.current.destroy(true);
                 gameRef.current = null;
             }
-            console.log(spaceId);
+            socket.disconnect();
+            console.log("Disconnected from space:", spaceId);
         };
-    }, [spaceId]);
+    }, [spaceId, userId]);
 
     return <div id="phaser-container"></div>;
 };
 
 export default PhaserGame;
-
